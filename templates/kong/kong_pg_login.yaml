@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kong-pg-login
+data: 
+  username: "dGVzdAo="
+  password: "dGVzdDEyMwo="

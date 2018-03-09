@@ -1,0 +1,196 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: kong-api-gateway
+  annotations:
+    openshift.io/display-name: "Kong API Gateway"
+    description: "Deploy API Gateway container for microservices"
+    iconClass: "icon-load-balancer"
+    tags: "api-gateway,kong"
+objects:
+
+
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: kong
+    name: kong
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: kong
+    strategy:
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          app: kong
+          deploymentconfig: kong  
+      spec:
+        containers:
+        - env:
+          - name: KONG_DATABASE
+            value: ${KONG_DATABASE}
+          - name: KONG_PG_HOST
+            value: ${KONG_PG_HOST}
+          - name: KONG_PG_PORT
+            value: ${KONG_PG_PORT}
+          - name: KONG_PG_USER
+            valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: ${KONG_PG_USER}
+          - name: KONG_PG_PASSWORD
+            valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: ${KONG_PG_PASSWORD}
+          - name: KONG_PG_DATABASE
+            value: ${KONG_PG_DATABASE}
+          - name: KONG_PROXY_ACCESS_LOG
+            value: "/dev/stdout"
+          - name: KONG_ADMIN_ACCESS_LOG
+            value: "/dev/stdout"
+          - name: KONG_PROXY_ERROR_LOG
+            value: "/dev/stderr"
+          - name: KONG_ADMIN_ERROR_LOG
+            value: "/dev/stderr"
+          image: nexus.pernambucanas-sp.com.br/centos7-kong:latest
+          name: master
+          ports:
+            - name: admin
+              containerPort: 8001
+              protocol: TCP
+            - name: proxy
+              containerPort: 8000
+              protocol: TCP
+            - name: proxy-ssl
+              containerPort: 8443
+              protocol: TCP
+            - name: admin-ssl
+              containerPort: 8444
+              protocol: TCP
+        imagePullSecrets:
+          - name: ${NEXUS_REGISTRY_SECRET}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: kong-proxy
+    name: kong-proxy
+  spec:
+    ports:
+    - name: kong-proxy
+      port: 8000
+      protocol: TCP
+      targetPort: 8000
+    - name: kong-proxy-ssl
+      port: 8443
+      protocol: TCP
+      targetPort: 8443
+    selector:
+      deploymentconfig: kong
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+
+
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: kong-admin
+    name: kong-admin
+  spec:
+    ports:
+    - name: kong-admin
+      port: 8001
+      protocol: TCP
+      targetPort: 8001
+    - name: kong-admin-ssl
+      port: 8444
+      protocol: TCP
+      targetPort: 8444
+    selector:
+      deploymentconfig: kong
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: kong-admin
+  spec:
+    port:
+      targetPort: kong-admin
+    to:
+      kind: Service
+      name: kong-admin
+      weight: 100
+    wildcardPolicy: None
+
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: kong-proxy
+  spec:
+    port:
+      targetPort: kong-proxy
+    to:
+      kind: Service
+      name: kong-proxy
+      weight: 100
+    wildcardPolicy: None
+    
+    
+    
+parameters:
+- name: KONG_DATABASE 
+  description: Kong database type
+  value: "postgres"
+  required: true
+  from: '[a-z]{10}'
+- name: KONG_PG_HOST 
+  description: Kong database host
+  required: true
+  value: ".pernambucanas.intranet"
+  from: '[a-zA-Z0-9]{50}'
+- name: KONG_PG_PORT 
+  description: Kong database port
+  value: "5432"
+  required: true
+  from: '[0-9]{5}'
+- name: KONG_PG_USER 
+  description: Postgres login Secret
+  value: "kong-pg-login"
+  required: true
+  from: '[A-Z0-9]{15}'
+- name: KONG_PG_PASSWORD 
+  description: Postgres login Secret
+  value: "kong-pg-login"
+  required: true
+  from: '[a-zA-Z0-9]{15}'
+  generate: expression
+- name: KONG_PG_DATABASE
+  description: Postgres database name
+  required: true
+  from: '[A-Z0-9]{15}'
+- name: NEXUS_REGISTRY_SECRET
+  description: Secret to pull kong image
+  value: "nexus-registry-login"
+  required: true
+  from: '[a-zA-Z0-9]{20}'
+
+labels:
+  kong: master
