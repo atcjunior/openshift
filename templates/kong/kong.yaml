@@ -63,7 +63,7 @@ objects:
             value: "/dev/stderr"
           - name: KONG_ADMIN_ERROR_LOG
             value: "/dev/stderr"
-          image: nexus.pernambucanas-sp.com.br/centos7-kong:latest
+          image: tolentino/centos7-kong:latest
           name: master
           ports:
             - name: admin
@@ -164,7 +164,7 @@ parameters:
 - name: KONG_PG_HOST 
   description: Kong database host
   required: true
-  value: ".pernambucanas.intranet"
+  value: ".your_domain"
   from: '[a-zA-Z0-9]{50}'
 - name: KONG_PG_PORT 
   description: Kong database port
