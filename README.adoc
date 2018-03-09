@@ -1,1 +1,3 @@
 # Openshift configuration files
+
+These are examples of yml's used to configurate Secrets, Templates, Imagestrems in Openshift Origin.
