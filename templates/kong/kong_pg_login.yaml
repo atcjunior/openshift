@@ -3,5 +3,5 @@ kind: Secret
 metadata:
   name: kong-pg-login
 data: 
-  username: "dGVzdAo="
-  password: "dGVzdDEyMwo="
+  username: "cG9zdGdyZV9rb25nX3VzZXJuYW1lCg=="
+  password: "cG9zdGdyZV9rb25nX3Bhc3N3b3JkCg=="

@@ -186,9 +186,9 @@ parameters:
   description: Postgres database name
   required: true
   from: '[A-Z0-9]{15}'
-- name: NEXUS_REGISTRY_SECRET
+- name: REGISTRY_SECRET
   description: Secret to pull kong image
-  value: "nexus-registry-login"
+  value: "registry-login"
   required: true
   from: '[a-zA-Z0-9]{20}'
 
