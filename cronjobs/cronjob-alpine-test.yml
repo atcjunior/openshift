@@ -1,0 +1,20 @@
+apiVersion: batch/v2alpha1
+kind: CronJob
+metadata:
+  name: alpine
+spec:
+  successfulJobsHistoryLimit: 3 
+  failedJobsHistoryLimit: 1  
+  schedule: "*/5 * * * *"
+  jobTemplate:             
+    spec:
+      template:
+        metadata:
+          labels:          
+            parent: "cronjob-alpine"
+        spec:
+          containers:
+          - name: alpine
+            image: alpine
+            command: ["echo",  "Hello cron Openshift"]
+          restartPolicy: OnFailure       

@@ -1,0 +1,27 @@
+{ 
+  "apiVersion": "v1",
+  "kind": "ImageStream",
+  "metadata": {
+    "annotations": {
+      "openshift.io/display-name": "Centos7 OpenJDK8"
+    },
+    "name": "centos7-java-spring-boot-s2i"
+  }, 
+ "spec": {
+     "dockerImageRepository": "tolentino/centos7-java-spring-boot-s2i",
+     "tags": [
+         {
+             "annotations": {
+                 "description": "Build and run Java Spring Boot Applications.",
+                 "iconClass": "icon-openjdk",
+                 "openshift.io/display-name": "Centos7 OpenJDK8",
+                 "sampleRepo": "https://github.com/atcjunior/centos7-java-spring-boot-s2i.git",
+                 "supports": "java:8",
+                 "tags": "builder,java,openjdk,maven,gradle",
+                 "version": "latest"
+             },
+             "name": "latest"
+         }
+     ]
+ }
+}
