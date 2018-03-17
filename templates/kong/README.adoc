@@ -2,9 +2,11 @@
 Antonio Tolentino <atcjunior@gmail.com>
 v1.0, March 15, 2018: First Version     
 
-Before use this template in Openshift yum must create a kong Docker image with some requirements.
+Steps to use this template:
+ 
+* Create Kong Docker image using this example https://github.com/atcjunior/openshift-docker-images/tree/master/centos7-kong
+* Install Postgres database
+* Create a user for Kong
 
-Follow this example as starter point:
 
-* https://github.com/atcjunior/openshift-docker-images/tree/master/centos7-kong
 
