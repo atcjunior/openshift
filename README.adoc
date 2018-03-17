@@ -1,3 +1,10 @@
-# Openshift configuration files
+= Openshift
+Antonio Tolentino <atcjunior@gmail.com>
+v1.0, February 26, 2018: First Version     
 
-These are examples of yml's used to configurate Secrets, Templates, Imagestreams in Openshift Origin.
+This Repository contain examples of **yaml** files to configure Openshift resources: 
+
+* Secrets
+* Templates
+* ImageStreams
+* Cronjobs
