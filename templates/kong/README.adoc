@@ -1,0 +1,10 @@
+= Kong API Gateway
+Antonio Tolentino <atcjunior@gmail.com>
+v1.0, March 15, 2018: First Version     
+
+Before use this template in Openshift yum must create a kong Docker image with some requirements.
+
+Follow this example as starter point:
+
+* https://github.com/atcjunior/Openshift-Docker-Images/tree/master/centos7-kong
+
