@@ -6,5 +6,5 @@ Before use this template in Openshift yum must create a kong Docker image with s
 
 Follow this example as starter point:
 
-* https://github.com/atcjunior/Openshift-Docker-Images/tree/master/centos7-kong
+* https://github.com/atcjunior/openshift-docker-images/tree/master/centos7-kong
 
